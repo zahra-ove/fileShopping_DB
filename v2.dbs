@@ -1,0 +1,533 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="SH" id="Project_11da5fe" database="MySql" >
+	<schema name="file_shopping_project" >
+		<table name="addresses" row_count="0" >
+			<column name="id" type="int" length="10" decimal="0" jt="4" mandatory="y" unsigned="y" autoincrement="y" />
+			<column name="user_id" type="int" length="10" decimal="0" jt="4" mandatory="y" unsigned="y" />
+			<column name="phone" type="varchar" length="20" decimal="0" jt="12" />
+			<column name="country" type="varchar" length="35" decimal="0" jt="12" />
+			<column name="city" type="varchar" length="35" decimal="0" jt="12" />
+			<column name="details" type="varchar" length="100" decimal="0" jt="12" >
+				<comment><![CDATA[other details of address.]]></comment>
+			</column>
+			<index name="pk_addresses" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<index name="fk_addresses_users" unique="NORMAL" >
+				<column name="user_id" />
+			</index>
+			<fk name="fk_addresses_users" to_schema="file_shopping_project" to_table="users" delete_action="cascade" update_action="cascade" >
+				<fk_column name="user_id" pk="id" />
+			</fk>
+		</table>
+		<table name="articles" row_count="0" >
+			<column name="id" type="int" length="10" decimal="0" jt="4" mandatory="y" unsigned="y" autoincrement="y" />
+			<column name="title" type="varchar" length="100" decimal="0" jt="12" mandatory="y" />
+			<column name="body" type="text" length="65535" decimal="0" jt="-1" mandatory="y" />
+			<column name="user_id" type="int" length="10" decimal="0" jt="4" mandatory="y" unsigned="y" />
+			<column name="created_at" type="datetime" length="19" decimal="0" jt="93" mandatory="y" />
+			<column name="updated_at" type="datetime" length="19" decimal="0" jt="93" />
+			<column name="slug" type="varchar" length="50" decimal="0" jt="12" />
+			<column name="view_count" type="int" length="10" decimal="0" jt="4" unsigned="y" >
+				<comment><![CDATA[number of views for this article.]]></comment>
+			</column>
+			<column name="category_id" type="int" length="10" decimal="0" jt="4" mandatory="y" unsigned="y" />
+			<index name="pk_articles" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<index name="fk_articles_categories" unique="NORMAL" >
+				<column name="category_id" />
+			</index>
+			<index name="fk_articles_users" unique="NORMAL" >
+				<column name="user_id" />
+			</index>
+			<fk name="fk_articles_categories" to_schema="file_shopping_project" to_table="categories" delete_action="restrict" update_action="cascade" >
+				<fk_column name="category_id" pk="id" />
+			</fk>
+			<fk name="fk_articles_users" to_schema="file_shopping_project" to_table="users" delete_action="restrict" update_action="cascade" >
+				<fk_column name="user_id" pk="id" />
+			</fk>
+		</table>
+		<table name="categories" row_count="0" >
+			<column name="id" type="int" length="10" decimal="0" jt="4" mandatory="y" unsigned="y" autoincrement="y" />
+			<column name="name" type="varchar" length="35" decimal="0" jt="12" mandatory="y" />
+			<column name="parent_id" type="int" length="10" decimal="0" jt="4" />
+			<column name="description" type="varchar" length="100" decimal="0" jt="12" />
+			<index name="pk_categories" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+		</table>
+		<table name="comments" row_count="0" >
+			<column name="id" type="int" length="10" decimal="0" jt="4" mandatory="y" unsigned="y" autoincrement="y" />
+			<column name="body" type="text" length="65535" decimal="0" jt="-1" mandatory="y" />
+			<column name="commentable_id" type="int" length="10" decimal="0" jt="4" mandatory="y" unsigned="y" />
+			<column name="commentable_type" type="varchar" length="35" decimal="0" jt="12" mandatory="y" />
+			<column name="is_approved" type="char" length="1" decimal="0" jt="1" />
+			<column name="user_id" type="int" length="10" decimal="0" jt="4" mandatory="y" unsigned="y" />
+			<index name="pk_comments" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<index name="fk_comments_users" unique="NORMAL" >
+				<column name="user_id" />
+			</index>
+		</table>
+		<table name="discounts" row_count="0" >
+			<column name="id" type="int" length="10" decimal="0" jt="4" mandatory="y" unsigned="y" autoincrement="y" />
+			<column name="name" type="varchar" length="35" decimal="0" jt="12" mandatory="y" />
+			<column name="percentage" type="varchar" length="3" decimal="0" jt="12" mandatory="y" >
+				<comment><![CDATA[percent of discount in terms of %.]]></comment>
+			</column>
+			<column name="description" type="text" length="65535" decimal="0" jt="-1" />
+			<column name="created_at" type="datetime" length="19" decimal="0" jt="93" />
+			<column name="updated_at" type="datetime" length="19" decimal="0" jt="93" />
+			<index name="pk_discounts" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+		</table>
+		<table name="episodes" row_count="0" >
+			<column name="id" type="int" length="10" decimal="0" jt="4" mandatory="y" unsigned="y" autoincrement="y" />
+			<column name="file_id" type="int" length="10" decimal="0" jt="4" mandatory="y" unsigned="y" >
+				<comment><![CDATA[file_id column specifies that this episode belongs to which file (course) in file tables.]]></comment>
+			</column>
+			<column name="episode_number" type="int" length="10" decimal="0" jt="4" mandatory="y" unsigned="y" >
+				<comment><![CDATA[this episode is # section of file_id file.]]></comment>
+			</column>
+			<column name="episode_price" type="varchar" length="20" decimal="0" jt="12" mandatory="y" >
+				<comment><![CDATA[in our website, ordering each episode from a file(course) is available so price of each episode should be specified.]]></comment>
+			</column>
+			<column name="episode_title" type="varchar" length="50" decimal="0" jt="12" mandatory="y" />
+			<column name="description" type="text" length="65535" decimal="0" jt="-1" />
+			<column name="slug" type="varchar" length="50" decimal="0" jt="12" />
+			<column name="view_count" type="int" length="10" decimal="0" jt="4" unsigned="y" >
+				<comment><![CDATA[number of clicks on this episode.]]></comment>
+			</column>
+			<column name="download_count" type="int" length="10" decimal="0" jt="4" unsigned="y" >
+				<comment><![CDATA[number of downloads of this episode.]]></comment>
+			</column>
+			<index name="pk_episodes" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<index name="fk_episodes_files" unique="NORMAL" >
+				<column name="file_id" />
+			</index>
+			<fk name="fk_episodes_files" to_schema="file_shopping_project" to_table="files" delete_action="cascade" update_action="cascade" >
+				<fk_column name="file_id" pk="id" />
+			</fk>
+		</table>
+		<table name="files" row_count="0" >
+			<column name="id" type="int" length="10" decimal="0" jt="4" mandatory="y" unsigned="y" autoincrement="y" />
+			<column name="file_code" type="varchar" length="35" jt="12" mandatory="y" />
+			<column name="file_name" type="varchar" length="35" decimal="0" jt="12" mandatory="y" />
+			<column name="price" type="varchar" length="20" decimal="0" jt="12" mandatory="y" >
+				<comment><![CDATA[if price is 0, it means this file is free to download.
+so the customer should not redirect to payment page and download must be start automatically.]]></comment>
+			</column>
+			<column name="file_type" type="varchar" length="15" decimal="0" jt="12" mandatory="y" >
+				<comment><![CDATA[type of file is:
+	- pdf
+	- video
+	- sound
+etc.]]></comment>
+			</column>
+			<column name="file_path" type="varchar" length="255" decimal="0" jt="12" mandatory="y" />
+			<column name="file_size" type="varchar" length="15" decimal="0" jt="12" >
+				<comment><![CDATA[size of file in terms of Mega Byte.]]></comment>
+			</column>
+			<column name="time" type="varchar" length="35" decimal="0" jt="12" >
+				<comment><![CDATA[time of this course.
+if file type was audio or video, this column is usable.]]></comment>
+			</column>
+			<column name="category_id" type="int" length="10" decimal="0" jt="4" mandatory="y" unsigned="y" />
+			<column name="description" type="text" length="65535" decimal="0" jt="-1" >
+				<comment><![CDATA[short description about this file(course).]]></comment>
+			</column>
+			<column name="download_count" type="int" length="10" decimal="0" jt="4" unsigned="y" />
+			<column name="click_count" type="int" length="10" decimal="0" jt="4" unsigned="y" />
+			<index name="pk_files" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<index name="fk_files_categories" unique="NORMAL" >
+				<column name="category_id" />
+			</index>
+			<fk name="fk_files_categories" to_schema="file_shopping_project" to_table="categories" delete_action="restrict" update_action="cascade" >
+				<fk_column name="category_id" pk="id" />
+			</fk>
+		</table>
+		<table name="images" row_count="0" >
+			<column name="id" type="int" length="10" decimal="0" jt="4" mandatory="y" unsigned="y" autoincrement="y" />
+			<column name="imageable_id" type="int" length="10" decimal="0" jt="4" mandatory="y" unsigned="y" />
+			<column name="imageable_type" type="int" length="10" decimal="0" jt="4" mandatory="y" unsigned="y" />
+			<column name="image_name" type="varchar" length="35" decimal="0" jt="12" mandatory="y" />
+			<column name="image_path" type="varchar" length="100" decimal="0" jt="12" />
+			<index name="pk_images" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+		</table>
+		<table name="orderable" row_count="0" >
+			<column name="id" type="int" length="10" decimal="0" jt="4" mandatory="y" unsigned="y" autoincrement="y" />
+			<column name="order_id" type="int" length="10" decimal="0" jt="4" mandatory="y" unsigned="y" />
+			<column name="orderable_id" type="int" length="10" decimal="0" jt="4" mandatory="y" unsigned="y" />
+			<column name="orderable_type" type="varchar" length="35" decimal="0" jt="12" mandatory="y" />
+			<column name="price" type="varchar" length="20" decimal="0" jt="12" mandatory="y" >
+				<comment><![CDATA[price of each item in this order(basket)]]></comment>
+			</column>
+			<column name="created_at" type="datetime" length="19" decimal="0" jt="93" >
+				<comment><![CDATA[time of adding this product to order list.]]></comment>
+			</column>
+			<column name="deleted_at" type="datetime" length="19" decimal="0" jt="93" >
+				<comment><![CDATA[time of removing this product from order list.]]></comment>
+			</column>
+			<index name="pk_orderable" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+		</table>
+		<table name="orders" row_count="0" >
+			<column name="id" type="int" length="10" decimal="0" jt="4" mandatory="y" unsigned="y" autoincrement="y" />
+			<column name="user_id" type="int" length="10" decimal="0" jt="4" mandatory="y" unsigned="y" />
+			<column name="cost" type="varchar" length="20" decimal="0" jt="12" mandatory="y" />
+			<column name="final_cost" type="varchar" length="20" decimal="0" jt="12" mandatory="y" />
+			<column name="discount_id" type="int" length="10" decimal="0" jt="4" unsigned="y" />
+			<column name="created_at" type="datetime" length="19" decimal="0" jt="93" mandatory="y" >
+				<comment><![CDATA[which time this order is set by user.]]></comment>
+			</column>
+			<column name="updated_at" type="datetime" length="19" decimal="0" jt="93" >
+				<comment><![CDATA[in which time this order get updated by user.
+when a product is added or deleted from order list, then orders table must be updated.]]></comment>
+			</column>
+			<column name="deleted_at" type="datetime" length="19" decimal="0" jt="93" >
+				<comment><![CDATA[if order was deleted, save the date of deletion.]]></comment>
+			</column>
+			<index name="pk_orders" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<index name="fk_orders_discounts" unique="NORMAL" >
+				<column name="discount_id" />
+			</index>
+			<index name="fk_orders_users" unique="NORMAL" >
+				<column name="user_id" />
+			</index>
+			<fk name="fk_orders_discounts" to_schema="file_shopping_project" to_table="discounts" delete_action="restrict" update_action="cascade" >
+				<fk_column name="discount_id" pk="id" />
+			</fk>
+			<fk name="fk_orders_users" to_schema="file_shopping_project" to_table="users" delete_action="restrict" update_action="cascade" >
+				<fk_column name="user_id" pk="id" />
+			</fk>
+		</table>
+		<table name="payments" row_count="0" >
+			<column name="id" type="int" length="10" decimal="0" jt="4" mandatory="y" unsigned="y" autoincrement="y" />
+			<column name="method" type="varchar" length="10" decimal="0" jt="12" mandatory="y" />
+			<column name="gateway_name" type="varchar" length="35" decimal="0" jt="12" mandatory="y" />
+			<column name="res_num" type="varchar" length="100" decimal="0" jt="12" mandatory="y" />
+			<column name="ref_num" type="varchar" length="100" decimal="0" jt="12" />
+			<column name="amount" type="varchar" length="20" decimal="0" jt="12" mandatory="y" >
+				<comment><![CDATA[amount of money which customer paid.]]></comment>
+			</column>
+			<column name="status" type="varchar" length="2" decimal="0" jt="12" mandatory="y" >
+				<comment><![CDATA[status determines if this payment is successful or not.
+1 for successful payment
+0 for failed payment]]></comment>
+			</column>
+			<column name="created_at" type="datetime" length="19" decimal="0" jt="93" mandatory="y" />
+			<column name="updated_at" type="datetime" length="19" decimal="0" jt="93" />
+			<column name="order_id" type="int" length="10" decimal="0" jt="4" mandatory="y" unsigned="y" />
+			<index name="pk_payments" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="fk_payments_orders" to_schema="file_shopping_project" to_table="orders" update_action="cascade" >
+				<fk_column name="order_id" pk="id" />
+			</fk>
+		</table>
+		<table name="permission" row_count="0" >
+			<column name="id" type="int" length="10" decimal="0" jt="4" mandatory="y" unsigned="y" autoincrement="y" />
+			<column name="name" type="varchar" length="100" decimal="0" jt="12" mandatory="y" />
+			<index name="pk_permission" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<index name="idx_permission" unique="UNIQUE" >
+				<column name="name" />
+			</index>
+		</table>
+		<table name="permission_role" row_count="0" >
+			<column name="permission_id" type="int" length="10" decimal="0" jt="4" mandatory="y" unsigned="y" />
+			<column name="role_id" type="int" length="10" decimal="0" jt="4" mandatory="y" unsigned="y" />
+			<index name="pk_permission_role" unique="PRIMARY_KEY" >
+				<column name="permission_id" />
+				<column name="role_id" />
+			</index>
+			<index name="fk_permission_role_roles" unique="NORMAL" >
+				<column name="role_id" />
+			</index>
+			<fk name="fk_permission_role_permission" to_schema="file_shopping_project" to_table="permission" delete_action="cascade" update_action="cascade" >
+				<fk_column name="permission_id" pk="id" />
+			</fk>
+			<fk name="fk_permission_role_roles" to_schema="file_shopping_project" to_table="roles" delete_action="cascade" update_action="cascade" >
+				<fk_column name="role_id" pk="id" />
+			</fk>
+		</table>
+		<table name="plan_user" row_count="0" >
+			<column name="id" type="int" length="10" decimal="0" jt="4" mandatory="y" unsigned="y" autoincrement="y" />
+			<column name="user_id" type="int" length="10" decimal="0" jt="4" mandatory="y" unsigned="y" />
+			<column name="plan_id" type="int" length="10" decimal="0" jt="4" mandatory="y" unsigned="y" />
+			<column name="download_count" type="int" length="10" decimal="0" jt="4" mandatory="y" />
+			<column name="created_at" type="datetime" length="19" decimal="0" jt="93" mandatory="y" />
+			<column name="expired_at" type="datetime" length="19" decimal="0" jt="93" mandatory="y" />
+			<index name="pk_subscription" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<index name="fk_subscription_plans" unique="NORMAL" >
+				<column name="plan_id" />
+			</index>
+			<index name="fk_subscription_users" unique="NORMAL" >
+				<column name="user_id" />
+			</index>
+			<fk name="fk_subscription_plans" to_schema="file_shopping_project" to_table="plans" delete_action="cascade" update_action="cascade" >
+				<fk_column name="plan_id" pk="id" />
+			</fk>
+			<fk name="fk_subscription_users" to_schema="file_shopping_project" to_table="users" delete_action="cascade" update_action="cascade" >
+				<fk_column name="user_id" pk="id" />
+			</fk>
+		</table>
+		<table name="plans" row_count="0" >
+			<column name="id" type="int" length="10" decimal="0" jt="4" mandatory="y" unsigned="y" autoincrement="y" />
+			<column name="name" type="varchar" length="100" decimal="0" jt="12" />
+			<column name="time_period" type="varchar" length="35" decimal="0" jt="12" mandatory="y" />
+			<column name="download_limit_number" type="int" length="10" decimal="0" jt="4" mandatory="y" />
+			<column name="price" type="varchar" length="20" decimal="0" jt="12" mandatory="y" />
+			<column name="description" type="text" length="65535" decimal="0" jt="-1" />
+			<index name="pk_plans" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+		</table>
+		<table name="rates" row_count="0" >
+			<column name="id" type="int" length="10" decimal="0" jt="4" mandatory="y" unsigned="y" autoincrement="y" />
+			<column name="rateable_id" type="int" length="10" decimal="0" jt="4" mandatory="y" />
+			<column name="rateable_type" type="int" length="10" decimal="0" jt="4" mandatory="y" />
+			<column name="rate" type="int" length="10" decimal="0" jt="4" mandatory="y" >
+				<comment><![CDATA[rate in 0 to 5 number]]></comment>
+			</column>
+			<column name="user_id" type="int" length="10" decimal="0" jt="4" mandatory="y" unsigned="y" >
+				<comment><![CDATA[determines that which user rates on this article of file.]]></comment>
+			</column>
+			<index name="pk_rates" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+		</table>
+		<table name="role_user" row_count="0" >
+			<column name="role_id" type="int" length="10" decimal="0" jt="4" mandatory="y" unsigned="y" />
+			<column name="user_id" type="int" length="10" decimal="0" jt="4" mandatory="y" unsigned="y" />
+			<index name="pk_role_user" unique="PRIMARY_KEY" >
+				<column name="role_id" />
+				<column name="user_id" />
+			</index>
+			<index name="fk_role_user_users" unique="NORMAL" >
+				<column name="user_id" />
+			</index>
+			<fk name="fk_role_user_roles" to_schema="file_shopping_project" to_table="roles" delete_action="cascade" update_action="cascade" >
+				<fk_column name="role_id" pk="id" />
+			</fk>
+			<fk name="fk_role_user_users" to_schema="file_shopping_project" to_table="users" delete_action="cascade" update_action="cascade" >
+				<fk_column name="user_id" pk="id" />
+			</fk>
+		</table>
+		<table name="roles" row_count="0" >
+			<column name="id" type="int" length="10" decimal="0" jt="4" mandatory="y" unsigned="y" autoincrement="y" />
+			<column name="name" type="varchar" length="35" decimal="0" jt="12" mandatory="y" />
+			<column name="description" type="text" length="65535" decimal="0" jt="-1" />
+			<index name="pk_roles" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+		</table>
+		<table name="taggables" row_count="0" >
+			<column name="id" type="int" length="10" decimal="0" jt="4" mandatory="y" unsigned="y" autoincrement="y" />
+			<column name="tag_id" type="int" length="10" decimal="0" jt="4" mandatory="y" unsigned="y" />
+			<column name="taggable_id" type="int" length="10" decimal="0" jt="4" mandatory="y" unsigned="y" />
+			<column name="taggable_type" type="varchar" length="35" decimal="0" jt="12" mandatory="y" />
+			<index name="pk_taggables" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+		</table>
+		<table name="tags" row_count="0" >
+			<column name="id" type="int" length="10" decimal="0" jt="4" mandatory="y" unsigned="y" autoincrement="y" />
+			<column name="name" type="varchar" length="35" decimal="0" jt="12" mandatory="y" />
+			<column name="description" type="text" length="65535" decimal="0" jt="-1" />
+			<index name="pk_tags" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+		</table>
+		<table name="tickets" row_count="0" >
+			<column name="id" type="int" length="10" decimal="0" jt="4" mandatory="y" unsigned="y" autoincrement="y" />
+			<column name="user_id" type="int" length="10" decimal="0" jt="4" mandatory="y" unsigned="y" />
+			<column name="category_id" type="int" length="10" decimal="0" jt="4" mandatory="y" unsigned="y" />
+			<column name="ticket_id" type="varchar" length="35" decimal="0" jt="12" mandatory="y" />
+			<column name="title" type="varchar" length="100" decimal="0" jt="12" mandatory="y" />
+			<column name="priority" type="varchar" length="35" decimal="0" jt="12" mandatory="y" />
+			<column name="message" type="text" length="65535" decimal="0" jt="-1" mandatory="y" />
+			<column name="status" type="varchar" length="7" decimal="0" jt="12" mandatory="y" >
+				<comment><![CDATA[status: open, close]]></comment>
+			</column>
+			<index name="pk_tickets" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<index name="idx_tickets" unique="UNIQUE" >
+				<column name="ticket_id" />
+			</index>
+			<index name="fk_tickets_categories" unique="NORMAL" >
+				<column name="category_id" />
+			</index>
+			<index name="fk_tickets_users" unique="NORMAL" >
+				<column name="user_id" />
+			</index>
+			<fk name="fk_tickets_categories" to_schema="file_shopping_project" to_table="categories" delete_action="restrict" update_action="cascade" >
+				<fk_column name="category_id" pk="id" />
+			</fk>
+			<fk name="fk_tickets_users" to_schema="file_shopping_project" to_table="users" delete_action="cascade" update_action="cascade" >
+				<fk_column name="user_id" pk="id" />
+			</fk>
+		</table>
+		<table name="users" row_count="0" >
+			<column name="id" type="int" length="10" decimal="0" jt="4" mandatory="y" unsigned="y" autoincrement="y" />
+			<column name="fullname" type="varchar" length="35" decimal="0" jt="12" mandatory="y" />
+			<column name="username" type="varchar" length="35" decimal="0" jt="12" mandatory="y" />
+			<column name="email" type="varchar" length="50" decimal="0" jt="12" mandatory="y" />
+			<column name="gender" type="varchar" length="2" decimal="0" jt="12" />
+			<column name="age" type="int" length="10" decimal="0" jt="4" />
+			<column name="mobile" type="varchar" length="20" decimal="0" jt="12" />
+			<index name="pk_users" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<index name="idx_users" unique="UNIQUE" >
+				<column name="email" />
+			</index>
+		</table>
+		<table name="wallets" row_count="0" >
+			<column name="id" type="int" length="10" decimal="0" jt="4" mandatory="y" unsigned="y" autoincrement="y" />
+			<column name="user_id" type="int" length="10" decimal="0" jt="4" mandatory="y" unsigned="y" />
+			<column name="wallet_cash" type="varchar" length="20" decimal="0" jt="12" mandatory="y" />
+			<index name="pk_wallet" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<index name="fk_wallet_users" unique="NORMAL" >
+				<column name="user_id" />
+			</index>
+			<fk name="fk_wallet_users" to_schema="file_shopping_project" to_table="users" delete_action="restrict" update_action="cascade" >
+				<fk_column name="user_id" pk="id" />
+			</fk>
+		</table>
+	</schema>
+	<connector name="SH" database="MySql" driver_class="com.mysql.jdbc.Driver" driver_jar="mysql-connector-java-8.0.18.jar" driver_desc="Standard" host="localhost" port="3306" instance="file_shopping_project" user="root" />
+	<layout name="Default Layout" id="Layout_8a48f0" show_relation="columns" >
+		<entity schema="file_shopping_project" name="articles" color="F4DDBE" x="960" y="288" />
+		<entity schema="file_shopping_project" name="categories" color="F4DDBE" x="976" y="112" />
+		<entity schema="file_shopping_project" name="comments" color="BED3F4" x="976" y="1120" />
+		<entity schema="file_shopping_project" name="discounts" color="C7F4BE" x="608" y="368" />
+		<entity schema="file_shopping_project" name="images" color="BED3F4" x="1184" y="1120" />
+		<entity schema="file_shopping_project" name="orderable" color="BED3F4" x="1184" y="1328" />
+		<entity schema="file_shopping_project" name="orders" color="C7F4BE" x="416" y="368" />
+		<entity schema="file_shopping_project" name="permission" color="BEBEF4" x="976" y="928" />
+		<entity schema="file_shopping_project" name="permission_role" color="BEBEF4" x="800" y="784" />
+		<entity schema="file_shopping_project" name="rates" color="BED3F4" x="976" y="1328" />
+		<entity schema="file_shopping_project" name="role_user" color="BEBEF4" x="976" y="784" />
+		<entity schema="file_shopping_project" name="roles" color="BEBEF4" x="1120" y="784" />
+		<entity schema="file_shopping_project" name="taggables" color="BED3F4" x="800" y="1328" />
+		<entity schema="file_shopping_project" name="tags" color="BED3F4" x="816" y="1168" />
+		<entity schema="file_shopping_project" name="tickets" color="F4DDBE" x="800" y="48" />
+		<entity schema="file_shopping_project" name="users" color="C7F4BE" x="224" y="368" />
+		<entity schema="file_shopping_project" name="wallets" color="C7F4BE" x="224" y="176" />
+		<entity schema="file_shopping_project" name="payments" color="C7F4BE" x="512" y="96" />
+		<entity schema="file_shopping_project" name="plan_user" color="C7F4BE" x="192" y="624" />
+		<entity schema="file_shopping_project" name="addresses" color="C7F4BE" x="48" y="384" />
+		<entity schema="file_shopping_project" name="plans" color="C7F4BE" x="352" y="624" />
+		<entity schema="file_shopping_project" name="files" color="F4DDBE" x="1136" y="112" />
+		<entity schema="file_shopping_project" name="episodes" color="F4DDBE" x="1328" y="112" />
+	</layout>
+	<layout name="Sample Layout with Tools" id="Layout_29054c" show_column_type="y" show_relation="columns" >
+		<entity schema="file_shopping_project" name="addresses" color="C7F4BE" x="80" y="528" />
+		<entity schema="file_shopping_project" name="articles" color="F4DDBE" x="1296" y="256" />
+		<entity schema="file_shopping_project" name="categories" color="F4DDBE" x="1296" y="80" />
+		<entity schema="file_shopping_project" name="comments" color="BED3F4" x="1328" y="1024" />
+		<entity schema="file_shopping_project" name="discounts" color="C7F4BE" x="832" y="272" />
+		<entity schema="file_shopping_project" name="episodes" color="F4DDBE" x="1760" y="80" />
+		<entity schema="file_shopping_project" name="files" color="F4DDBE" x="1536" y="80" />
+		<entity schema="file_shopping_project" name="images" color="BED3F4" x="1600" y="1024" />
+		<entity schema="file_shopping_project" name="orderable" color="BED3F4" x="1600" y="1232" />
+		<entity schema="file_shopping_project" name="orders" color="C7F4BE" x="576" y="272" />
+		<entity schema="file_shopping_project" name="payments" color="C7F4BE" x="48" y="208" />
+		<entity schema="file_shopping_project" name="permission" color="BEBEF4" x="1088" y="832" />
+		<entity schema="file_shopping_project" name="permission_role" color="BEBEF4" x="1088" y="688" />
+		<entity schema="file_shopping_project" name="plans" color="C7F4BE" x="560" y="768" />
+		<entity schema="file_shopping_project" name="rates" color="BED3F4" x="1328" y="1232" />
+		<entity schema="file_shopping_project" name="role_user" color="BEBEF4" x="1280" y="688" />
+		<entity schema="file_shopping_project" name="roles" color="BEBEF4" x="1440" y="688" />
+		<entity schema="file_shopping_project" name="plan_user" color="C7F4BE" x="320" y="528" />
+		<entity schema="file_shopping_project" name="taggables" color="BED3F4" x="1088" y="1232" />
+		<entity schema="file_shopping_project" name="tags" color="BED3F4" x="1136" y="1072" />
+		<entity schema="file_shopping_project" name="tickets" color="F4DDBE" x="1088" y="256" />
+		<entity schema="file_shopping_project" name="users" color="C7F4BE" x="320" y="272" />
+		<entity schema="file_shopping_project" name="wallets" color="C7F4BE" x="320" y="80" />
+		<callout x="320" y="160" pointer="Round" >
+			<comment><![CDATA[This is a sample layout with tools. 
+For better understanding the schema create multiple layouts with same or different tables. 
+Double-click on any table, column or foreign key to edit.]]></comment>
+		</callout>
+		<group name="comments" color="ECF0F7" >
+			<entity schema="file_shopping_project" name="comments" />
+			<entity schema="file_shopping_project" name="images" />
+			<entity schema="file_shopping_project" name="orderable" />
+			<entity schema="file_shopping_project" name="rates" />
+			<entity schema="file_shopping_project" name="taggables" />
+			<entity schema="file_shopping_project" name="tags" />
+		</group>
+		<group name="permission_role" color="ECECF7" >
+			<entity schema="file_shopping_project" name="permission_role" />
+			<entity schema="file_shopping_project" name="role_user" />
+			<entity schema="file_shopping_project" name="roles" />
+			<entity schema="file_shopping_project" name="permission" />
+		</group>
+		<group name="categories" color="F7F2EC" >
+			<entity schema="file_shopping_project" name="categories" />
+			<entity schema="file_shopping_project" name="files" />
+			<entity schema="file_shopping_project" name="articles" />
+			<entity schema="file_shopping_project" name="tickets" />
+			<entity schema="file_shopping_project" name="episodes" />
+		</group>
+		<group name="users" color="EEF7EC" >
+			<entity schema="file_shopping_project" name="users" />
+			<entity schema="file_shopping_project" name="orders" />
+			<entity schema="file_shopping_project" name="plan_user" />
+			<entity schema="file_shopping_project" name="addresses" />
+			<entity schema="file_shopping_project" name="payments" />
+			<entity schema="file_shopping_project" name="wallets" />
+			<entity schema="file_shopping_project" name="discounts" />
+			<entity schema="file_shopping_project" name="plans" />
+		</group>
+		<script name="Sample SQL Editor" id="Editor_1b33ae0" language="SQL" >
+			<string><![CDATA[SELECT id, fullname, username, email, gender, age, mobile
+FROM
+	file_shopping_project.users s;]]></string>
+		</script>
+		<browser id="Browse_4339100" name="Sample Relational Data Browse" confirm_updates="y" >
+			<browse_table schema="file_shopping_project" entity="users" x="20" y="20" width="400" height="300" >
+				<browse_table schema="file_shopping_project" entity="addresses" fk="fk_addresses_users" x="440" y="20" width="500" height="350" />
+			</browse_table>
+		</browser>
+		<query id="Query_1e71115" name="Sample Query Builder" >
+			<query_table schema="file_shopping_project" name="users" alias="u" x="48" y="48" >
+				<column name="id" />
+				<column name="fullname" />
+				<column name="username" />
+				<column name="email" />
+				<column name="gender" />
+				<column name="age" />
+				<column name="mobile" />
+				<query_table schema="file_shopping_project" name="addresses" alias="a" x="208" y="48" fk="fk_addresses_users" type="Inner Join" >
+					<column name="id" />
+					<column name="phone" />
+					<column name="user_id" />
+					<column name="country" />
+					<column name="city" />
+					<column name="details" />
+				</query_table>
+			</query_table>
+		</query>
+	</layout>
+</project>
